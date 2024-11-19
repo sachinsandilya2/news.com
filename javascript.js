@@ -1,4 +1,4 @@
-const apiKey = "be87dcd78e816ba00783bdf2e85a8d20"; // Your GNews API key
+const apiKey = "4d701c11522ffe3682bec820fa5127aa"; // Updated GNews API key
 const url = `https://gnews.io/api/v4/top-headlines?lang=hi&token=${apiKey}`;
 
 const newsContainer = document.getElementById("news-container");
@@ -8,9 +8,11 @@ fetch(url)
   .then(response => {
     if (!response.ok) {
       if (response.status === 403) {
-        throw new Error("Access denied! Please check your API key or subscription plan.");
+        throw new Error("Access Denied! Invalid API key or subscription limit reached.");
+      } else if (response.status === 429) {
+        throw new Error("Too Many Requests! Please wait before making more requests.");
       }
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(`HTTP Error! Status: ${response.status}`);
     }
     return response.json();
   })
@@ -18,7 +20,7 @@ fetch(url)
     console.log("GNews API Response:", data);
 
     if (!data.articles || data.articles.length === 0) {
-      newsContainer.innerHTML = "<p>No Hindi news found from GNews.</p>";
+      newsContainer.innerHTML = "<p>No Hindi news found. Try again later.</p>";
     } else {
       newsContainer.innerHTML = ""; // Clear any previous content
 
@@ -38,6 +40,6 @@ fetch(url)
     }
   })
   .catch(error => {
-    console.error("Error fetching news from GNews:", error);
+    console.error("Error fetching news:", error);
     newsContainer.innerHTML = `<p>Error loading news: ${error.message}</p>`;
   });
