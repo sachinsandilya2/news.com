@@ -1,2 +1,2 @@
-// Future interactivity can go here (e.g., dynamic news loading)
-console.log("Welcome to My News Channel!");
+// Add any interactive features here if needed
+console.log("News Channel Page Loaded Successfully!");
